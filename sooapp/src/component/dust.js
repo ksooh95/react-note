@@ -3,10 +3,11 @@ import { useState, useEffect } from 'react';
 
 function Dust() {
     const [geowalDust, setGeowalDust] = useState(null);
+    // const [test, setTest] = useState(null);
 
     const myKey = process.env.REACT_APP_API_KEY;
     useEffect(() => {
-        const fetchData = async () => {
+        const dustFetchData = async () => {
             try {
                 const response = await axios.get(
                     'http://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getCtprvnRltmMesureDnsty',
@@ -19,22 +20,23 @@ function Dust() {
                         },
                     }
                 );
+                console.log('먼지데이터 불러와졌나 :', response.data);
                 const items = response.data?.response?.body?.items;
                 if (items) {
                     const filterGeowal = items.find((e) => {
                         return e.stationName.includes('구월동');
                     });
                     setGeowalDust(filterGeowal);
-                    console.log('불러와졌나 :', geowalDust);
+                    // setTest(response.data);
                 }
-                console.log('불러와졌나 :', response.data);
             } catch (err) {
                 console.log('캐치에서 잡힘 :', err);
             }
         };
 
-        fetchData();
-    }, []);
+        dustFetchData();
+    }, [myKey]);
+
     return (
         <div className="Dust">
             <div className="dust_info">
